@@ -28,8 +28,8 @@ jobs:
   build_firmware:
 #    name: RHC-internal-Z4
 #    runs-on: self-hosted
-    name: Build firmware on Ubuntu 20.04
-    runs-on: ubuntu-20.04
+    name: Build firmware on Ubuntu 22.04
+    runs-on: ubuntu-22.04
     
     steps:
       - name: Check out code from GitHub
@@ -77,7 +77,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
         run: |
-          cd ZuluSCSI/distrib
+          cd ZuluSCSI
+          tools/rename_firmware_for_release.sh
+          cd distrib
           rm -rf bootloader
           RELEASE=$(basename ${{github.ref}})
-          gh release upload --repo ${GITHUB_REPOSITORY} $RELEASE *
+          gh release upload --repo ${GITHUB_REPOSITORY} $RELEASE *.bin *.uf2
