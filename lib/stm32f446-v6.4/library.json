@@ -1,0 +1,8 @@
+{
+    "name": "stm32f446-v6.4",
+    "version": "1.0.0",
+    "description": "Customized STM32Cube generated files",
+    "keywords": "ZuluSCSI stm32",
+    "frameworks": "*",
+    "platforms": "*"
+  }

@@ -1,0 +1,11 @@
+{
+    "name": "fatfs",
+    "version": "1.0.0",
+    "description": "custom fatfs library",
+    "keywords": "fatfs",
+    "frameworks": "*",
+    "platforms": "*",
+    "build": {
+      "includeDir": "source"
+    } 
+  }
