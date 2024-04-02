@@ -141,6 +141,7 @@ void mainLoop()
     scsiPoll();
     scsiDiskPoll();
     s2s_configPoll();
+    s2s_ledBlinkPoll();
 
 #ifdef S2S_USB_FS
     int usbBusy = s2s_usbDevicePoll(&hUsbDeviceFS);

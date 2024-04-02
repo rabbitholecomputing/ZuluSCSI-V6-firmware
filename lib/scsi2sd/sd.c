@@ -225,6 +225,7 @@ int sdInit()
 
         if (cs && !(blockDev.state & DISK_PRESENT))
         {
+            s2s_blinkCancel();
             s2s_ledOn();
 
             // Debounce. Quicker if the card is present at
@@ -289,17 +290,8 @@ int sdInit()
     }
     if (!(blockDev.state & (DISK_PRESENT | DISK_INITIALISED)))
     {
-
-     for (int i = 0; i < 5; ++i)
-        {
-            // visual indicator for no SD card
-            s2s_ledOff();
-            s2s_delay_ms(250);
-            s2s_ledOn();
-            s2s_delay_ms(250);
-        }
-        s2s_ledOff();
-        s2s_delay_ms(500);
+        // visual indicator for no SD card
+        s2s_ledBlink(5, 500, 1000);
     }
     firstInit = 0;
 

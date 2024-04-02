@@ -16,9 +16,12 @@
 //	along with SCSI2SD.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef S2S_LED_H
 #define S2S_LED_H
+#include <stdint.h>
 
 void s2s_ledInit(void);
 void s2s_ledOn(void);
 void s2s_ledOff(void);
-
+void s2s_ledBlink(uint8_t times, uint32_t delay, uint32_t end_delay);
+uint8_t s2s_ledBlinkPoll();
+void s2s_blinkCancel();
 #endif
