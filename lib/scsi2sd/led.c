@@ -22,6 +22,7 @@
 #endif
 
 #include "gpio.h"
+#include "time.h"
 
 void s2s_ledInit()
 {
@@ -39,13 +40,63 @@ void s2s_ledInit()
 	HAL_GPIO_Init(LED_IO_GPIO_Port, &ledDef);
 }
 
+static uint16_t blink_count = 0;
+static uint32_t blink_start = 0;
+static uint32_t blink_delay = 0;
+static uint32_t blink_end_delay= 0;
+
 void s2s_ledOn()
 {
+	if (blink_count > 0) return;
 	HAL_GPIO_WritePin(LED_IO_GPIO_Port, LED_IO_Pin, GPIO_PIN_SET);
 }
 
 void s2s_ledOff()
 {
+	if (blink_count > 0) return;
 	HAL_GPIO_WritePin(LED_IO_GPIO_Port, LED_IO_Pin, GPIO_PIN_RESET);
 }
 
+
+void s2s_ledBlink(uint8_t times, uint32_t delay, uint32_t end_delay)
+{
+	if (!s2s_ledBlinkPoll() && blink_count == 0)
+	{
+		blink_start = s2s_getTime_ms();
+		blink_count = 2 * times;
+		blink_delay = delay / 2;
+		blink_end_delay =  end_delay;
+		HAL_GPIO_WritePin(LED_IO_GPIO_Port, LED_IO_Pin, GPIO_PIN_SET);
+	}
+
+}
+
+uint8_t s2s_ledBlinkPoll()
+{
+	uint8_t is_blinking = 1;
+	if (blink_count == 0)
+	{
+		is_blinking = 0;
+	}
+	else if (blink_count == 1 && ((uint32_t)(s2s_getTime_ms() - blink_start)) > blink_end_delay )
+	{
+		HAL_GPIO_WritePin(LED_IO_GPIO_Port, LED_IO_Pin, GPIO_PIN_RESET);
+		blink_count = 0;
+		is_blinking = 0;
+	}
+	else if (blink_count > 1 && ((uint32_t)(s2s_getTime_ms() - blink_start)) > blink_delay)
+	{
+		if (1 & blink_count)
+			HAL_GPIO_WritePin(LED_IO_GPIO_Port, LED_IO_Pin, GPIO_PIN_SET);
+		else
+			HAL_GPIO_WritePin(LED_IO_GPIO_Port, LED_IO_Pin, GPIO_PIN_RESET);
+		blink_count--;
+		blink_start = s2s_getTime_ms();
+	}
+	return is_blinking;
+}
+
+void s2s_blinkCancel()
+{
+	blink_count = 0;
+}
