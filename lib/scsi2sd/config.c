@@ -35,7 +35,7 @@
 
 #include <string.h>
 
-static const uint16_t FIRMWARE_VERSION = 0x0101;
+static const uint16_t FIRMWARE_VERSION = 0x0102;
 
 // Optional static config
 extern uint8_t* __fixed_config;
